@@ -26,11 +26,13 @@ def clean_reddit_data(reddit_df, stocks):
     #reddit_df = reddit_df.head(100)
 
     print(reddit_df)
+    stocks_id = {}
     for i in range(len(reddit_df)):
         remove = True
         text = re.sub(r'[^\w\s]', '', f'{reddit_df.loc[i, "title"]} {str(reddit_df.loc[i, "body"])}').split(' ')
         for key, value in stocks.items():
             if (key in text):
+                stocks_id[key] = reddit_df.loc[i, "title"]
                 remove = False
                 continue
 
@@ -39,6 +41,8 @@ def clean_reddit_data(reddit_df, stocks):
 
 
 
+
+    reddit_df['Stock'] = stocks_id
     print(reddit_df)
     reddit_df.to_csv('data/clean_reddit.csv')
 
