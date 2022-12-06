@@ -43,8 +43,11 @@ def collect_symbols(offset=None):
     data = pd.read_csv('https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqtraded.txt', sep='|')
     data_clean = data[data['Test Issue'] == 'N']
     symbols = data_clean['NASDAQ Symbol'].tolist()
+    names = data_clean['Security Name'].tolist()
+    with open('data/symbols_names.csv', 'w') as f:
+        for pair in zip(symbols, names):
+            f.write(f'{pair[0]}, {pair[1]}\n')
 
-    print(symbols)
     if offset:
         symbols = symbols[offset::]
 
@@ -86,4 +89,4 @@ if __name__ == '__main__':
     date_range = validate_args()
 
     symbols = collect_symbols()
-    collect_data(symbols, date_range)
+    #collect_data(symbols, date_range)
