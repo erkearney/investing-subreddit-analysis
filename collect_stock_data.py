@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 import yfinance as yf
 
-parser = argparse.ArgumentParser(description='Train neural dependency parser in python')
+parser = argparse.ArgumentParser(description='Download Yahoo Finance stock data')
 parser.add_argument('-s', '--start',
     help='Date to start collecting data (YYYY-MM-DD ex: 2017-01-01)')
 parser.add_argument('-e', '--end',
