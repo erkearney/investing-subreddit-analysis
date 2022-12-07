@@ -18,84 +18,65 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 parser = argparse.ArgumentParser(description='Analyze reddit data')
 parser.add_argument('-d', '--debug', action='store_true',
     help='Enter debug mode')
-parser.add_argument('-v', '--verbose', action='store_true', help='Be verbose')
 args = parser.parse_args()
 
-def read_in_data(data):
+
+def score_sentence(sentence):
     '''
-    Reads in the data from a csv file
+    Uses VADER to determine whether the given sentence is positive, negative,
+    or neutral
 
     Parameters
     ----------
+    sentence : str
+        The sentence to be analyzed
+
+    Returns
+    -------
+    score: dict<str : float>
+        The results of the sentiment analysis taking the form of
+        {<sentiment} : <score>}
+        (ex: {'neg': 0.0, 'neu': 1.0, 'pos': 0.0})
+    '''
+    analyzer = SentimentIntensityAnalyzer()
+    score = analyzer.polarity_scores(sentence)
+    score.pop('compound') # VADER adds a compound score which we don't need
+    return score
+
+
+def analyze_data(data):
+    '''
+    Calls score_sentence on all sentences in data
+
+    Paramters
+    ---------
     data : str
-        The filepath to the csv file to be read in for analysis
+        The file path to the csv file to be analyzed
 
-    returns
-    --------
-    pandas.core.frame.DataFrame
-        The data to be analyzed
-    '''
-    return pd.read_csv(data)
-
-
-class SentimentAnalyzer():
-    '''
     Attributes
     ----------
-    analyzer : vaderSentiment.SentimentIntensityAnalyzer
-    (https://github.com/Holek/vader_sentiment)
-        The VADER analyzer object
+    scores : List<dict<sentiment, score>>
+        List of scores for each sentence
+        (ex: {"pos" : 0.0, "neu" : 1.0, "neg" : 0.0})
+
+    Outputs
+    -------
+    pandas.core.frame.DataFrame -> csv file
+        Dataframe with a new column, sentiment_score, written out to
+        scored_reddit.csv
     '''
+    data = pd.read_csv(data)
+    if args.debug:
+        data = data.head(1000)
 
-    def __init__(self, data):
-        self.data = read_in_data(data)
-        self.analyzer = SentimentIntensityAnalyzer()
+    data_size = len(data)
+    scores = [defaultdict()] * data_size
+    for i in range(data_size):
+        sentence = f'{data.loc[i, "title"]} {str(data.loc[i, "body"])}'
+        scores[i] = score_sentence(sentence)
 
-
-    def score_sentence(self, sentence):
-        '''
-        Uses VADER to determine whether the given sentence is positive, negative,
-        or neutral
-
-        Parameters
-        ----------
-        sentence : str
-            The sentence to be analyzed
-
-        Returns
-        -------
-        dict<str : float>
-            The results of the sentiment analysis taking the form of
-            {<sentiment} : <score>}
-            (ex: {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0})
-        '''
-        return self.analyzer.polarity_scores(sentence)
-
-
-    def analyze_data(self):
-        '''
-        Calls self.score_sentence on all sentences in self.data
-
-        Modifies
-        --------
-        self.data : pandas.core.frame.DataFrame
-            Appends a new column, sentiment_score to the data
-        '''
-        if args.debug:
-            self.data = self.data.head(10)
-
-        scores = [defaultdict()] * len(self.data)
-        for i in range(len(self.data)):
-            sentence = f'{self.data.loc[i, "title"]} {str(self.data.loc[i, "body"])}'
-            scores[i] = self.score_sentence(sentence)
-
-            if args.verbose:
-                if i % 10 == 0:
-                    print(f'{sentence} scored {scores[i]}')
-
-        self.data = self.data.assign(sentiment_score=scores)
+    data.assign(sentiment_score=scores).to_csv('data/scored_reddit.csv')
 
 
 if __name__ == '__main__':
-    sentiment_analyzer = SentimentAnalyzer('data/clean_reddit.csv')
-    sentiment_analyzer.analyze_data()
+    analyze_data('data/clean_reddit.csv')
