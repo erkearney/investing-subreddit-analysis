@@ -96,7 +96,7 @@ def clean_reddit_data(reddit_df, stocks):
                 )
 
     clean_data = pd.DataFrame(clean_data)
-    reddit_df.to_csv('data/clean_reddit.csv')
+    clean_data.to_csv('data/clean_reddit.csv')
 
     if args.verbose:
         print(f'cleaned data:\n {clean_data}')
