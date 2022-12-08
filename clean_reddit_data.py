@@ -91,9 +91,11 @@ def clean_reddit_data(reddit_df, stocks):
                         'body' : reddit_df.loc[i, 'body'],
                         'subreddit' : reddit_df.loc[i, 'subreddit'],
                         'score' : reddit_df.loc[i, 'score'],
-                        'date' : reddit_df.loc[i, 'date']
+                        'date' : reddit_df.loc[i, 'date'].split(' ')[0]
+                        # Strip time from date column ^
                     }
                 )
+
 
     clean_data = pd.DataFrame(clean_data)
     clean_data.to_csv('data/clean_reddit.csv')
