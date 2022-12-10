@@ -102,11 +102,38 @@ class Market():
         '''
         Simulates the stock market and the impacts on each trader's
         portfolios, when finished, writes each portfolio to a csv file
+
+        Notes
+        -----
+        The New York Stock Exchange (NYSE) is closed on weekends, so this
+        method skips those days.
+
+        TODO
+        ----
+        The NYSE is also closed for:
+            * New Years Day
+            * Martin Luther King, Jr. Day
+            * Washington's Birthday
+            * Good Friday
+            * Memorial Day
+            * Juneteenth National Independence Day
+            * Independnce Day
+            * Labor Day
+            * Thanksgiving Day
+            * Christmas Day
+        It would be nice if skipping these days could be added as well. This
+        problem is trickier than it iniitiall sounds as holidays are not
+        observed on the same date every year, (ex: New Years Day is January
+        1st, but in 2022 it was observed January 3rd; in 2023 it will be
+        observed January 2nd).
         '''
         self.read_in_stocks('data/stock_data')
         current_date = self.start_date
+        weekend = set([5, 6]) # Skip weekends
         while current_date <= self.end_date:
             current_date += datetime.timedelta(days=1)
+            if current_date.weekday() in weekend:
+                current_date += datetime.timedelta(days=1)
 
             for trader in self.traders:
                 if args.verbose and current_date.day == 1:
@@ -346,7 +373,7 @@ if __name__ == '__main__':
     investing = Trader('investing', data)
     stocks = Trader('stocks', data)
 
-    start_date = datetime.date(2017, 1, 27)
+    start_date = datetime.date(2019, 4, 27)
     end_date = datetime.date(2021, 1, 27)
     market = Market([wallstreetbets, investing, stocks], 'data/stock_data', start_date, end_date)
     market.simulate()
