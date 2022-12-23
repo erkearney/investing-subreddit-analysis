@@ -20,10 +20,10 @@
     into "subreddits", which are user-created and dedicated to a particular
     topic of discussion. This means that there are often multiple subreddits
     dedicated to the same topic broadly, however because they grew separately
-    they will have often fostered their own individual communities, each with
-    their own beliefs, rules, goals, etc.\\
+    they have often fostered their own individual communities, each with their
+    own beliefs, rules, goals, etc.\\
 
-    I've identified three subreddits focussed on investing into the U.S. stock
+    I've identified three subreddits focused on investing into the U.S. stock
     market, \href{https://www.reddit.com/r/investing/}{r/investing},
     \href{https://www.reddit.com/r/stocks/}{r/stocks}, 
     and \href{https://www.reddit.com/r/wallstreetbets/}{r/wallstreetbets}
@@ -56,18 +56,17 @@
     symbol was found, I attached it as a new column in the dataframe to that
     post. If a single post contained multiple symbols, I copied the post and
     added a new entry into the dataset, with the second symbol attached in the
-    new column, and repeated as necessary.
-
-    For example, a post titled: "Video explaining the huge growth of large cap
-    growth stocks (AAPL, AMZN, MSFT, TSLA, FB, GOOGL)","I've seen this
-    question everywhere on this sub: ""why did apple/tesla/[insert large growth
-    company name here] growth so much so quick! They still haven't made a lot
-    of profit! We are in a bubble!"* from r/investing became:\\
+    new column, and repeated as necessary (e.g., a post titled: "Video
+    explaining the huge growth of large cap growth stocks (AAPL, AMZN, MSFT,
+    TSLA, FB, GOOGL)","I've seen this question everywhere on this sub: ""why
+    did apple/tesla/[insert large growth company name here] growth so much so
+    quick! They still haven't made a lot of profit! We are in a bubble!"* from
+    r/investing became:\\
 
     \noindent'AAPL', 'Video explaining the huge growth of large cap . . .'\\
     'AMZN', 'Video explaining the huge growth of large cap . . .'\\
     'MFTS', 'Video explaining the huge growth of large cap . . .'\\
-    etc.\\
+    etc.)\\
 
     *Unfortunately the Kaggle dataset did not include the usernames of those
     who posted, so I cannot properly give credit to this quote.
@@ -81,7 +80,7 @@
    throw a wrench in VADER's ability to determine the sentiment of statements
    originating from it.\\
 
-   I had originally hoped to be able to train my own model, which would've
+   I had originally hoped to be able to train my own model, which would have
    naturally led to more accurate results, however due to a shortage of time
    and resources I decided it would be more prudent to simply use a
    pre-trained model instead.\\
@@ -112,9 +111,9 @@
     all the posts concerning the same stock together. If that score ended up
     being > 0, the trader 'bought' the stock, otherwise, it 'sold' the stock.\\
 
-    I had originaly hoped to simulate around five years of the stock market,
-    however I realized that r/wallstreetbets hasn't been active that long, so
-    instead I had to scale back to simulating 21 months.
+    My intention was to simulate around five years of the stock market, however
+    I realized that r/wallstreetbets hasn't been active that long, so instead I
+    had to scale back to simulating 21 months.
 \section{Results}
     The following is the value of all the stocks in the portfolio of each
     subreddit, minus the amount that it would've taken to buy those stocks,
@@ -129,7 +128,7 @@
 	\item r/wallstreetbets : \$7,302.13
     \end{itemize}
 
-    While it appears that investing was the clear winner, there's much more to
+    While it appears that investing was the clear winner, there is much more to
     this story (See Errors \& Future Work)
 \section{Errors \& Future Work}
     While developing this project, it became clear that there are many errors
